@@ -7,3 +7,4 @@ As versões devem obedecer o padrão **0.0.0** onde o *primeiro dígito* se refe
 | Versão | Pontos importantes | Observações |
 |--------|:-------------------|:------------|
 | 0.1.0 | Criação e inicialização do sistema. | Nenhum alerta pertinente. |
+| 0.2.0 | Rotas de usuário criadas e funcionais com middlewares, controllers e todo o devido acesso ao banco de dados. | Existem melhorias a ser feitas na parte que integra usuário aos pedidos. |

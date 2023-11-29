@@ -26,3 +26,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | Commit | Versão | Descrição |
 |:----------|:----------:|:----------|
 | 000 | 0.0.0 | Commit fictício para exemplificação | 
+| 001 | 0.2.0 | Rotas, controllers e middlewares de usuários criados. |

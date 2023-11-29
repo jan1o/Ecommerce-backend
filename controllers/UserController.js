@@ -1,0 +1,187 @@
+const User = require("../models/User");
+
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
+const Order = require("../models/Order");
+
+const jwtSecret = process.env.JWT_SECRET;
+
+//generate user token
+const generateToken = (id) => {
+  return jwt.sign({id}, jwtSecret, {expiresIn: "7d",});
+};
+
+//register user and sign in
+const register = async(req, res) => {
+  const {name, email, password, confirmpassword} = req.body;
+
+  //check if user exists
+  const user = await User.findOne({email});
+
+  if(user) {
+    res.status(422).json({errors: ["Por favor utilize outro email."]});
+    return;
+  }
+
+  //generate password hash
+  const salt = await bcrypt.genSalt();
+  const passwordHash = await bcrypt.hash(password, salt);
+
+  //create user
+  const newUser = await User.create({
+    nome: name,
+    email,
+    senha: passwordHash
+  });
+
+  //if user was created successfully, return the token
+  if(!newUser){
+    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+    return;
+  }
+
+  res.status(201).json({
+    _id: newUser._id,
+    token: generateToken(newUser._id)
+  })
+
+};
+
+//sign user in
+const login = async (req, res) => {
+  const {email, password} = req.body;
+
+  const user = await User.findOne({email});
+
+  //check if user exists
+  if(!user) {
+    res.status(422).json({errors: ["O usuário não foi encontrado."]});
+    return;
+  }
+
+  //check if passowrd matches
+  if(!(await bcrypt.compare(password, user.senha))){
+    res.status(422).json({errors: ["Senha inválida."]});
+    return;
+  }
+
+  //return user with token
+  res.status(201).json({
+    _id: user._id,
+    token: generateToken(user._id)
+  });
+
+};
+
+//get current logged in user
+const getCurrentUser = async (req, res) => {
+  const user = req.user; //usuário retornado pelo authguard
+
+  res.status(200).json(user);
+}
+
+//update an user
+const update = async (req, res) => {
+  //const {name, password, bio} = req.body;
+  const {nome, nascimento, telefone, imagem, senha} = req.body;
+
+  const reqUser = req.user;
+
+  const user = await User.findById(mongoose.Types.ObjectId(reqUser._id)).select("-password");
+
+  if(nome){
+    user.nome = nome;
+  }
+
+  if(nascimento){
+    user.nascimento = nascimento;
+  }
+
+  if(telefone){
+    user.telefone = telefone;
+  }
+
+  if(imagem){
+    user.imagem = imagem;
+  }
+
+  if(senha){
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    user.senha = passwordHash;
+  }
+
+  await user.save();
+
+  res.status(200).json(user);
+}
+
+const getUserFavorites = async (req, res) => {
+  const user = req.user;
+
+  const favorites = user.favorites;
+
+  res.status(200).json(favorites);
+
+}
+
+const getUserOrders = async (req, res) => {
+  const user = req.user;
+  const userId = user._id;
+
+  try{
+
+    const pedidos = await Order.find({ _id: userId });
+
+    //verificar se algum pedido foi encontrado
+    if(!pedidos){
+      res.status(404).json({errors: ["Nenhum pedido foi encontrado."]});
+      return;
+    }
+
+    res.status(200).json(pedidos);
+
+  } catch (error){
+
+    res.status(404).json({errors: ["Pedidos não encontrados."]});
+    return;
+
+  }
+}
+
+module.exports = {
+  register,
+  login,
+  getCurrentUser, 
+  update,
+  getUserFavorites,
+  getUserOrders,
+}
+
+/*
+//get user by id
+const getUserById = async(req, res) => {
+  const {id} = req.params;
+
+  try {
+    const user = await User.findById(mongoose.Types.ObjectId(id)).select("-password");
+
+    //check if user exists
+    if(!user){
+      res.status(404).json({errors: ["Usuário não encontrado."]});
+      return;
+    }
+
+    res.status(200).json(user);
+
+  } catch (error) {
+
+    res.status(404).json({errors: ["Usuário não encontrado."]});
+    return;
+    
+  }
+
+}
+*/
