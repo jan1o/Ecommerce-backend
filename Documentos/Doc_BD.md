@@ -3,6 +3,7 @@ Este documento tem por função orientá-lo sobre a construção do Banco de Dad
 Devido a esse paradigma nossa documentação será um pouco diferente. Aqui você verá modelos simples de como estruturar o seu bd no MongoDB Atlas (plataforma online e gratuíta para testes). Por padrão o MongoDb cria um atributo de _id nos registros, então estou omitindo esse atributo.
 
 ## Tabelas
-user(nome, nacimento, telefone, imagem, email, senha, favoritos[]);
-product(nome, descricao, precoAnterior, preco, frete, total, likes[], imagens[], especificacoes[]);
-order(usuario, dados{nome, sobrenome, estado, cidade, bairro, endereco, complemento}, produtos[], total, status);
+user(name, birth, telephone, image, email, password, favorites[]);
+product(name, description, previousPrice, price, shipping, total, likes[], images[], categories[], specifications[{spec, desc}]);
+order(user, data{name, secondName, state, city, neighborhood, address, complement}, products[], total, status);
+category(name);
