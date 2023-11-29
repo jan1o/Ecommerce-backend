@@ -6,7 +6,7 @@ const conn = async () => {
   try {
 
     const dbConn = await mongoose.connect(
-      `mongodb+srv://${dbUser}:${dbPassword}@cluster0.85ffcr1.mongodb.net/MyCommerce?retryWrites=true&w=majority`
+      `mongodb+srv://${dbUser}:${dbPassword}@cluster0.85ffcr1.mongodb.net/MyEcommerce?retryWrites=true&w=majority`
     );
     console.log("Conectou ao banco!");
 
