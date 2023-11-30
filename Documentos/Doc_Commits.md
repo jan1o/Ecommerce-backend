@@ -28,3 +28,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 000 | 0.0.0 | Commit fictício para exemplificação | 
 | 001 | 0.2.0 | Rotas, controllers e middlewares de usuários criados. |
 | 002 | 0.2.1 | Rotas, controllers e middlewares de produtos criados, mas ainda não funcionais; melhorias feitas nas funcionalidades relacionadas ao usuário. |
+| 003 | 0.3.1 | Rotas, controllers e middlewares de produtos funcionais; model de Admin criado. |

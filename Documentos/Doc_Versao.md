@@ -9,3 +9,4 @@ As versões devem obedecer o padrão **0.0.0** onde o *primeiro dígito* se refe
 | 0.1.0 | Criação e inicialização do sistema. | Nenhum alerta pertinente. |
 | 0.2.0 | Rotas de usuário criadas e funcionais com middlewares, controllers e todo o devido acesso ao banco de dados. | Existem melhorias a ser feitas na parte que integra usuário aos pedidos. |
 | 0.2.1 | Melhorias realizadas nas funcionalidades de usuário. | nenhum alerta pertinente. |
+| 0.3.1 | Funcionalidades de Produto (models, controllers, middlewares, rotas) implementadas. | Nenhum alerta pertinente. |
