@@ -1,9 +1,10 @@
 const User = require("../models/User");
+const Order = require("../models/Order");
+const Product = require("../models/Product");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const Order = require("../models/Order");
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -30,9 +31,9 @@ const register = async(req, res) => {
 
   //create user
   const newUser = await User.create({
-    nome: name,
+    name: name,
     email,
-    senha: passwordHash
+    password: passwordHash
   });
 
   //if user was created successfully, return the token
@@ -61,7 +62,7 @@ const login = async (req, res) => {
   }
 
   //check if passowrd matches
-  if(!(await bcrypt.compare(password, user.senha))){
+  if(!(await bcrypt.compare(password, user.password))){
     res.status(422).json({errors: ["Senha inválida."]});
     return;
   }
@@ -84,33 +85,33 @@ const getCurrentUser = async (req, res) => {
 //update an user
 const update = async (req, res) => {
   //const {name, password, bio} = req.body;
-  const {nome, nascimento, telefone, imagem, senha} = req.body;
+  const {name, birth, telephone, image, password} = req.body;
 
   const reqUser = req.user;
 
   const user = await User.findById(mongoose.Types.ObjectId(reqUser._id)).select("-password");
 
-  if(nome){
-    user.nome = nome;
+  if(name){
+    user.name = name;
   }
 
   if(nascimento){
-    user.nascimento = nascimento;
+    user.birth = birth;
   }
 
-  if(telefone){
-    user.telefone = telefone;
+  if(telephone){
+    user.telephone = telephone;
   }
 
-  if(imagem){
-    user.imagem = imagem;
+  if(image){
+    user.image = image;
   }
 
-  if(senha){
+  if(password){
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    user.senha = passwordHash;
+    user.password = passwordHash;
   }
 
   await user.save();
@@ -121,19 +122,20 @@ const update = async (req, res) => {
 const getUserFavorites = async (req, res) => {
   const user = req.user;
 
-  const favorites = user.favorites;
+  //const favoritosId = user.favorites;
 
-  res.status(200).json(favorites);
+  const favoritos = await Product.find({ likes: mongoose.Types.ObjectId(user._id) });
+
+  res.status(200).json(favoritos);
 
 }
 
 const getUserOrders = async (req, res) => {
   const user = req.user;
-  const userId = user._id;
 
   try{
 
-    const pedidos = await Order.find({ _id: userId });
+    const pedidos = await Order.find({ user: mongoose.Types.ObjectId(user._id)});
 
     //verificar se algum pedido foi encontrado
     if(!pedidos){

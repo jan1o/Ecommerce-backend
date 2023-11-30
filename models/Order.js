@@ -1,19 +1,18 @@
-const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 const orderSchema = new Schema({
-  usuario: ObjectId,
-  dados: {
-    nome: String,
-    sobrenome: String,
-    estado: String,
-    cidade: String,
-    bairro: String,
-    endereco: String,
-    complemento: String,
+  user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  data: {
+    name: String,
+    secondName: String,
+    state: String,
+    city: String,
+    neighborhood: String,
+    address: String,
+    complement: String,
   },
-  produtos: Array,
+  products: Array,
   total: Number,
   status: String
 },
