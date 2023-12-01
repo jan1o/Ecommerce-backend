@@ -25,7 +25,7 @@ const getUserOrders = async(req, res) => {
     res.status(200).json(orders);
 
   } catch(error){
-    res.status(404).json({error: ["Nenhum pedido encontrado"]});
+    res.status(404).json({errors: ["Nenhum pedido encontrado"]});
     return;
   }
 }
@@ -45,7 +45,7 @@ const attOrderStatus = async(req, res) => {
     res.status(200).json(order);
 
   } catch(error){
-    res.status(422).json({error: ["Houve um erro, por favor tente mais tarde."]});
+    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
     return;
   }
 }
@@ -64,7 +64,7 @@ const cancelOrder = async(req, res) => {
     res.status(200).json(order);
 
   } catch(error){
-    res.status(400).json({error: ["Houve um erro, por favor tente mais tarde."]});
+    res.status(400).json({errors: ["Houve um erro, por favor tente mais tarde."]});
   }
 }
 

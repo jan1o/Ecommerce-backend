@@ -16,3 +16,5 @@ router.get("/userOrders", authGuard, getUserOrders); //GET pedidos do usuário l
 
 router.put("/:id", authGuard, adminGuard, attOrderStatus); //Atualizar status do pedido
 router.put("/cancelOrder/:id", authGuard, cancelOrder); //Usuário cancela a compra
+
+module.exports = router;
