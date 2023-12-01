@@ -5,6 +5,6 @@ Devido a esse paradigma nossa documentação será um pouco diferente. Aqui voc�
 ## Tabelas
 * user(name, birth, telephone, image, email, password, favorites[]);
 * product(name, description, previousPrice, price, shipping, total, likes[], images[], categories[], specifications[{spec, desc}]);
-* order(user, data{name, secondName, state, city, neighborhood, address, complement}, products[], total, status);
+* order(user, data{name, secondName, state, city, neighborhood, address, complement}, products[], total, status, request_cancel);
 * category(name);
 * admin(user);

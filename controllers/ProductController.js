@@ -27,7 +27,7 @@ const getProductById = async(req, res) => {
 const getNewest = async(req, res) => {
   try{
 
-    const produtos = await Product.find().sort({ created_at: -1 }).limit(5);
+    const produtos = await Product.find({}).sort({ created_at: -1 }).limit(5);
 
     if(!produtos){
       res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
@@ -46,7 +46,7 @@ const getNewest = async(req, res) => {
 const getBest = async(req, res) => {
   try{
 
-    const produtos = await Product.find().sort({ price: -1 }).limit(5);
+    const produtos = await Product.find({}).sort({ price: -1 }).limit(5);
 
     if(!produtos){
       res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
