@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const {Schema} = mongoose;
 
 const orderSchema = new Schema({
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  user: Schema.Types.ObjectId,
   data: {
     name: String,
     secondName: String,
@@ -14,7 +14,8 @@ const orderSchema = new Schema({
   },
   products: Array,
   total: Number,
-  status: String
+  status: String,
+  request_cancel: Boolean,
 },
 {
   timestamps: true
