@@ -20,7 +20,7 @@ const getUserOrders = async(req, res) => {
 
   try{
 
-    const orders = await Order.find({ user: mongoose.Types.ObjectId(user._id) });
+    const orders = await Order.find({ user: new mongoose.Types.ObjectId(user._id) });
 
     res.status(200).json(orders);
 
@@ -36,7 +36,7 @@ const attOrderStatus = async(req, res) => {
 
   try{
 
-    const order = await Order.findById(mongoose.Types.ObjectId(id));
+    const order = await Order.findById( new mongoose.Types.ObjectId(id));
 
     order.status = status;
 
@@ -55,7 +55,7 @@ const cancelOrder = async(req, res) => {
 
   try{
 
-    const order = await Order.findById(mongoose.Types.ObjectId(id));
+    const order = await Order.findById(new mongoose.Types.ObjectId(id));
 
     order.request_cancel = true;
 

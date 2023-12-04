@@ -31,3 +31,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 003 | 0.3.1 | Rotas, controllers e middlewares de produtos funcionais; model de Admin criado. |
 | 004 | 0.4.2 | Funcionanlidade de pedidos funcionais; correções realizadas nos models com chave estrangeira. |
 | 005 | 0.5.2 | Funcionalidades de carrinho de compras funcionais. |
+| 006 | 0.6.3 | Funcionalidades de categoria implementadas e funcionais. |

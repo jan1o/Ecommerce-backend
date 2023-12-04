@@ -8,7 +8,7 @@ const getProductById = async(req, res) => {
 
   try{
 
-    const produto = await Product.findById(mongoose.Types.ObjectId(id));
+    const produto = await Product.findById(new mongoose.Types.ObjectId(id));
 
     if(!produto){
       res.status(404).json({errors: ["Produto não encontrado."]});
@@ -133,7 +133,7 @@ const updateProduct = async(req, res) => {
   const {_id, name, description, previousPrice, price, shipping, images, categories} = req.body;
 
   try{
-    const product = await Product.findById(mongoose.Types.ObjectId(_id));
+    const product = await Product.findById(new mongoose.Types.ObjectId(_id));
 
     if(name){
       product.name = name;
@@ -175,7 +175,7 @@ const deleteProduct = async(req, res) => {
 
   try{
 
-    const product = await Product.deleteOne({ _id: mongoose.Types.ObjectId(id) });
+    const product = await Product.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
 
     res.status(200).json({message: ["Produto deletado com sucesso."]});
 

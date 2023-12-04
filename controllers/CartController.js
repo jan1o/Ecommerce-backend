@@ -7,7 +7,7 @@ const getUserCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: mongoose.Types.ObjectId(user._id)});
+    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id)});
 
     if(!cart){
       res.status(404).json({errors: ["Carrinho Vazio."]});
@@ -27,7 +27,7 @@ const emptyCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.findById(mongoose.Types.ObjectId(id));
+    const cart = await Cart.findById(new mongoose.Types.ObjectId(id));
 
     if(!cart){
       res.status(404).json({errors: ["Carrinho não encontrado."]});
@@ -52,15 +52,15 @@ const addProductToCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
 
     const productList = cart.products;
 
-    if(productList.find(p => p.name === mongoose.Types.ObjectId(id))){
-      productList[0][mongoose.Types.ObjectId(id)].amount += 1;
+    if(productList.find(p => p.name === new mongoose.Types.ObjectId(id))){
+      productList[0][new mongoose.Types.ObjectId(id)].amount += 1;
     }
     else{
-      productList.push({product: mongoose.Types.ObjectId(id), amount: 1});
+      productList.push({product: new mongoose.Types.ObjectId(id), amount: 1});
     }
 
     cart.products = productList;
@@ -81,11 +81,11 @@ const removeProductFromCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
 
     const productList = cart.products;
 
-    productList.filter(p => p.product !== mongoose.Types.ObjectId(id));
+    productList.filter(p => p.product !== new mongoose.Types.ObjectId(id));
     
     cart.products = productList;
 
@@ -105,12 +105,12 @@ const updateProductAmount = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
 
     const productList = cart.products;
 
-    if(productList.find(p => p.name === mongoose.Types.ObjectId(id))){
-      productList[0][mongoose.Types.ObjectId(id)].amount = amount;
+    if(productList.find(p => p.name === new mongoose.Types.ObjectId(id))){
+      productList[0][new mongoose.Types.ObjectId(id)].amount = amount;
     }
 
     cart.products = productList;
