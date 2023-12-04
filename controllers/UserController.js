@@ -89,13 +89,13 @@ const update = async (req, res) => {
 
   const reqUser = req.user;
 
-  const user = await User.findById(mongoose.Types.ObjectId(reqUser._id)).select("-password");
+  const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select("-password");
 
   if(name){
     user.name = name;
   }
 
-  if(nascimento){
+  if(birth){
     user.birth = birth;
   }
 
@@ -124,7 +124,7 @@ const getUserFavorites = async (req, res) => {
 
   //const favoritosId = user.favorites;
 
-  const favoritos = await Product.find({ likes: mongoose.Types.ObjectId(user._id) });
+  const favoritos = await Product.find({ likes: new mongoose.Types.ObjectId(user._id) });
 
   res.status(200).json(favoritos);
 
@@ -135,7 +135,7 @@ const getUserOrders = async (req, res) => {
 
   try{
 
-    const pedidos = await Order.find({ user: mongoose.Types.ObjectId(user._id)});
+    const pedidos = await Order.find({ user: new mongoose.Types.ObjectId(user._id)});
 
     //verificar se algum pedido foi encontrado
     if(!pedidos){
