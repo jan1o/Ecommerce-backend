@@ -2,6 +2,8 @@ const User = require("../models/User");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
+const { createCart } = require("./CartController");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
@@ -36,8 +38,16 @@ const register = async(req, res) => {
     password: passwordHash
   });
 
-  //if user was created successfully, return the token
   if(!newUser){
+    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+    return;
+  }
+
+  const userCreated = await User.findOne({email}).select("-password");
+  const cart = createCart(new mongoose.Types.ObjectId(userCreated._id));
+
+  if(!cart){
+    await User.deleteOne({ _id: new mongoose.Types.ObjectId(userCreated._id) });
     res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
     return;
   }
@@ -153,6 +163,41 @@ const getUserOrders = async (req, res) => {
   }
 }
 
+const favoriteProduct = async(user, product) => {
+  try {
+    
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
+
+    usuario.favorites.push(new mongoose.Types.ObjectId(product));
+
+    await usuario.save();
+
+    return true;
+
+
+  } catch (error) {
+    return false;
+  }
+}
+
+const desfavoriteProduct = async(user, product) => {
+  try {
+    
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
+
+    //usuario.favorites.push(new mongoose.Types.ObjectId(product));
+    usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
+
+    await usuario.save();
+
+    return true;
+
+
+  } catch (error) {
+    return false;
+  }
+}
+
 module.exports = {
   register,
   login,
@@ -160,30 +205,6 @@ module.exports = {
   update,
   getUserFavorites,
   getUserOrders,
+  favoriteProduct,
+  desfavoriteProduct,
 }
-
-/*
-//get user by id
-const getUserById = async(req, res) => {
-  const {id} = req.params;
-
-  try {
-    const user = await User.findById(mongoose.Types.ObjectId(id)).select("-password");
-
-    //check if user exists
-    if(!user){
-      res.status(404).json({errors: ["Usuário não encontrado."]});
-      return;
-    }
-
-    res.status(200).json(user);
-
-  } catch (error) {
-
-    res.status(404).json({errors: ["Usuário não encontrado."]});
-    return;
-    
-  }
-
-}
-*/

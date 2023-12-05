@@ -34,10 +34,22 @@ const loginValidation = () => {
 
 const userUpdateValidation = () => {
   return [
-    body("nome")
+    body("name")
       .optional()
       .isLength({min: 3}).withMessage("O nome precisa de pelo menos 3 caracteres."),
-    body("senha")
+    body("birth")
+      .optional()
+      .isString()
+      .withMessage("A data de nascimento deve ser escrita em formato de texto"),
+    body("telephone")
+      .optional()
+      .isString()
+      .withMessage("O telephone deve ser escrito em formato de texto"),
+    body("image")
+      .optional()
+      .isURL()
+      .withMessage("A imagem de profile deve ser uma URL"),
+    body("password")
       .optional()
       .isLength({min: 5}).withMessage("A senha deve ter pelo menos 5 caracteres."),
   ];

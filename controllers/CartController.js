@@ -125,10 +125,32 @@ const updateProductAmount = async(req, res) => {
   }
 }
 
+const createCart = async(userId) => {
+  try {
+
+    const cart = await Cart.create({
+      user: new mongoose.Types.ObjectId(userId),
+      products: [],
+      total: 0
+    });
+
+    if(!cart){
+      return false;
+    }
+
+    return true;
+
+  } catch(error){
+    console.log(error);
+    return(false);
+  }
+}
+
 module.exports = {
   getUserCart,
   emptyCart,
   addProductToCart,
   removeProductFromCart,
   updateProductAmount,
+  createCart
 }
