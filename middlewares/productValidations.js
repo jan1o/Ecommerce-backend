@@ -12,7 +12,11 @@ const productCreateValidator = () => {
     body("price")
       .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório"),
     body("shipping")
-      .isDecimal({}).withMessage("O valor do frete é obrigatório")
+      .isDecimal({}).withMessage("O valor do frete é obrigatório"),
+    body("categories")
+      .optional()
+      .isArray()
+      .withMessage("Caso desejar adicionar categorias, envie uma lista")
   ];
 }
 
@@ -28,7 +32,11 @@ const productUpdateValidator = () => {
     body("price")
       .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório."),
     body("shipping")
-      .isDecimal({}).withMessage("O valor do frete é obrigatório.")
+      .isDecimal({}).withMessage("O valor do frete é obrigatório."),
+    body("categories")
+    .optional()
+    .isArray()
+    .withMessage("Caso desejar adicionar categorias, envie uma lista")
   ];
 }
 

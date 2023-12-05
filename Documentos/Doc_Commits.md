@@ -33,3 +33,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 005 | 0.5.2 | Funcionalidades de carrinho de compras funcionais. |
 | 006 | 0.6.3 | Funcionalidades de categoria implementadas e funcionais. |
 | 007 | 0.7.3 | Middlewares melhorados e novas funcionalidades em produto e usuário adicionadas. |
+| 008 | 0.7.3 | Middleware de produto tratando as categories. |
