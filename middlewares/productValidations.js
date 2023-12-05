@@ -24,15 +24,24 @@ const productUpdateValidator = () => {
     body("description")
       .isString().withMessage("A descrição é obrigatória."),
     body("previousPrice")
-      .isDecimal({ gt: 0 }).withMessage("O preço anterior é obrigatório"),
+      .isDecimal({ gt: 0 }).withMessage("O preço anterior é obrigatório."),
     body("price")
-      .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório"),
+      .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório."),
     body("shipping")
-      .isDecimal({}).withMessage("O valor do frete é obrigatório")
+      .isDecimal({}).withMessage("O valor do frete é obrigatório.")
+  ];
+}
+
+const productLikeValidator = () => {
+  return [
+    body("id")
+      .isString()
+      .withMessage("É necessário selecionar um produto.")
   ];
 }
 
 module.exports = {
   productCreateValidator,
-  productUpdateValidator
+  productUpdateValidator,
+  productLikeValidator,
 }

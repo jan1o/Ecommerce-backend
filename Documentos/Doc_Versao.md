@@ -13,3 +13,4 @@ As versões devem obedecer o padrão **0.0.0** onde o *primeiro dígito* se refe
 | 0.4.2 | Funcionanlidade de pedidos funcionais; Correções realizadas nos models com chave estrangeira. | nenhum alerta pertinente. |
 | 0.5.2 | Funcionalidades de carrinho de compras implementadas. | nenhum alerta pertinente. |
 | 0.6.3 | Funcionalidades de categoria implementadas; Correções nos controllers nos códigos de mongoose.Types.ObjectId(). | Nenhum alerta pertinente. |
+| 0.7.3 | Funcionalidades de like e deslike em produto adicionado; Carrinho criado junto de usuário. | Nenhum alerta pertinente. |

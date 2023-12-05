@@ -1,5 +1,7 @@
 const Product = require("../models/Product");
 
+const { favoriteProduct, desfavoriteProduct } = require("./UserController");
+
 const mongoose = require("mongoose");
 
 //get product by id
@@ -185,6 +187,63 @@ const deleteProduct = async(req, res) => {
   }
 }
 
+//like a product
+const likeProduct = async(req, res) => {
+  const {id} = req.body;
+  const user = req.user;
+
+  try {
+    
+    const produto = await Product.findById(new mongoose.Types.ObjectId(id));
+
+    produto.likes.push(new mongoose.Types.ObjectId(user._id));
+
+    const userLike = favoriteProduct(user._id, produto._id);
+
+    if(!userLike){
+      req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+      return;
+    }
+
+    await produto.save();
+
+    res.status(200).json({message: ["Produto favoritado."]});
+
+
+  } catch (error) {
+    req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+    return;
+  }
+}
+
+const dislikeProduct = async(req, res) => {
+  const {id} = req.body;
+  const user = req.user;
+
+  try {
+    
+    const produto = await Product.findById(new mongoose.Types.ObjectId(id));
+
+    //produto.likes.push(new mongoose.Types.ObjectId(user._id));
+    produto.likes = produto.likes.filter(user => user !== new mongoose.Types.ObjectId(user._id));
+
+    const userDislike = desfavoriteProduct(user._id, produto._id);
+
+    if(!userDislike){
+      req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+      return;
+    }
+
+    await produto.save();
+
+    res.status(200).json({message: ["Produto favoritado."]});
+
+  } catch (error) {
+    req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+    return;
+  }
+}
+
 module.exports = {
   getProductById,
   getNewest,
@@ -193,5 +252,7 @@ module.exports = {
   getProductsByCategory,
   insertProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  likeProduct,
+  dislikeProduct,
 }
