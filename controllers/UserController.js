@@ -186,7 +186,9 @@ const desfavoriteProduct = async(user, product) => {
     const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
 
     //usuario.favorites.push(new mongoose.Types.ObjectId(product));
-    usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
+    //usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
+    const index = usuario.favorites.indexOf(new mongoose.Types.ObjectId(product));
+    usuario.favorites.splice(index, 1);
 
     await usuario.save();
 
