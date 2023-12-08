@@ -1,7 +1,5 @@
 const Product = require("../models/Product");
 
-const { favoriteProduct, desfavoriteProduct } = require("./UserController");
-
 const mongoose = require("mongoose");
 
 //get product by id
@@ -250,6 +248,44 @@ const likeProduct = async(req, res) => {
   }
 }
 
+const favoriteProduct = async(user, product) => {
+  try {
+    
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
+
+    usuario.favorites.push(new mongoose.Types.ObjectId(product));
+
+    await usuario.save();
+
+    return true;
+
+
+  } catch (error) {
+    return false;
+  }
+}
+
+const desfavoriteProduct = async(user, product) => {
+  try {
+    
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
+
+    //usuario.favorites.push(new mongoose.Types.ObjectId(product));
+    //usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
+    const index = usuario.favorites.indexOf(new mongoose.Types.ObjectId(product));
+    usuario.favorites.splice(index, 1);
+
+    await usuario.save();
+
+    return true;
+
+
+  } catch (error) {
+    return false;
+  }
+}
+
+
 module.exports = {
   getProductById,
   getNewest,
@@ -259,5 +295,5 @@ module.exports = {
   insertProduct,
   updateProduct,
   deleteProduct,
-  likeProduct,
+  likeProduct
 }
