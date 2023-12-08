@@ -42,15 +42,6 @@ const register = async(req, res) => {
     return;
   }
 
-  const userCreated = await User.findOne({email}).select("-password");
-  const cart = createCart(new mongoose.Types.ObjectId(userCreated._id));
-
-  if(!cart){
-    await User.deleteOne({ _id: new mongoose.Types.ObjectId(userCreated._id) });
-    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
-    return;
-  }
-
   res.status(201).json({
     _id: newUser._id,
     token: generateToken(newUser._id)
@@ -128,66 +119,9 @@ const update = async (req, res) => {
   res.status(200).json(user);
 }
 
-const getUserFavorites = async (req, res) => {
-  const user = req.user;
-
-  //const favoritosId = user.favorites;
-
-  const favoritos = await Product.find({ likes: new mongoose.Types.ObjectId(user._id) });
-
-  res.status(200).json(favoritos);
-
-}
-
-const getUserOrders = async (req, res) => {
-  const user = req.user;
-
-  try{
-
-    const pedidos = await Order.find({ user: new mongoose.Types.ObjectId(user._id)});
-
-    //verificar se algum pedido foi encontrado
-    if(!pedidos){
-      res.status(404).json({errors: ["Nenhum pedido foi encontrado."]});
-      return;
-    }
-
-    res.status(200).json(pedidos);
-
-  } catch (error){
-
-    res.status(404).json({errors: ["Pedidos não encontrados."]});
-    return;
-
-  }
-}
-
-const createCart = async(userId) => {
-  try {
-
-    const cart = await Cart.create({
-      user: new mongoose.Types.ObjectId(userId),
-      products: [],
-      total: 0
-    });
-
-    if(!cart){
-      return false;
-    }
-
-    return true;
-
-  } catch(error){
-    console.log(error);
-    return(false);
-  }
-}
-
 module.exports = {
   register,
   login,
   getCurrentUser, 
   update,
-  getUserFavorites,
-  getUserOrders,
 }

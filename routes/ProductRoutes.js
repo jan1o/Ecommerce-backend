@@ -8,6 +8,7 @@ const {
   getBest, 
   getProductsBySearch, 
   getProductsByCategory,
+  getUserFavorites,
   insertProduct,
   updateProduct,
   deleteProduct,
@@ -26,6 +27,7 @@ router.get("/newest", getNewest); //GET produtos mais novos
 router.get("/best", getBest); //GET produtos mais caros
 router.get("/search/product/:name", getProductsBySearch); //GET produtos pesquisados pelo usuário
 router.get("/search/category/:id", getProductsByCategory); //GET produtos pela categoria pesquisada
+router.get("/userFavorites", authGuard, getUserFavorites); //GET nos produtos favoritos do usuário
 
 router.post("/", authGuard, adminGuard, productCreateValidator(), validate, insertProduct); //Cadastrar novo produto
 router.put("/like/:id", authGuard, likeProduct); //Usuário favorita produto

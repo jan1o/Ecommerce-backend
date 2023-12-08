@@ -105,6 +105,17 @@ const getProductsByCategory = async(req, res) => {
   }
 }
 
+const getUserFavorites = async (req, res) => {
+  const user = req.user;
+
+  //const favoritosId = user.favorites;
+
+  const favoritos = await Product.find({ likes: new mongoose.Types.ObjectId(user._id) });
+
+  res.status(200).json(favoritos);
+
+}
+
 //insert a new product in DB
 const insertProduct = async(req, res) => {
   const {name, description, previousPrice, price, shipping, images, categories, specifications} = req.body;
@@ -292,6 +303,7 @@ module.exports = {
   getBest,
   getProductsBySearch,
   getProductsByCategory,
+  getUserFavorites,
   insertProduct,
   updateProduct,
   deleteProduct,

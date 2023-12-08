@@ -36,3 +36,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 008 | 0.7.3 | Middleware de produto tratando as categories. |
 | 009 | 0.7.4 | Concertos nas funcionalidades de produto. |
 | 010 | 0.7.5 | Concertos nas funcionalidades de carrinho. |
+| 011 | 0.7.6 | Melhorias no model e controller de usuário. |
