@@ -1,7 +1,5 @@
 const Product = require("../models/Product");
 
-const { favoriteProduct, desfavoriteProduct } = require("./UserController");
-
 const mongoose = require("mongoose");
 
 //get product by id
@@ -29,7 +27,7 @@ const getProductById = async(req, res) => {
 const getNewest = async(req, res) => {
   try{
 
-    const produtos = await Product.find({}).sort({ created_at: -1 }).limit(5);
+    const produtos = await Product.find().sort({ createdAt: -1 }).limit(5);
 
     if(!produtos){
       res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
@@ -67,9 +65,11 @@ const getBest = async(req, res) => {
 const getProductsBySearch = async(req, res) => {
   const {name} = req.params;
 
+  const produto = name.toLowerCase();
+
   try{
 
-    const produtos = await Product.find({ name: { $regex: '.*' + name + '.*' } }).limit(25);
+    const produtos = await Product.find({ name: { $regex: '.*' + produto + '.*' } }).limit(25);
 
     if(!produtos){
       res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
@@ -86,11 +86,11 @@ const getProductsBySearch = async(req, res) => {
 
 //get products by category
 const getProductsByCategory = async(req, res) => {
-  const {category} = req.params;
+  const {id} = req.params;
 
   try{
 
-    const produtos = await Product.find({ category: category }).limit(25);
+    const produtos = await Product.find({ categories: new mongoose.Types.ObjectId(id) }).limit(25);
 
     if(!produtos){
       res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
@@ -105,21 +105,36 @@ const getProductsByCategory = async(req, res) => {
   }
 }
 
+const getUserFavorites = async (req, res) => {
+  const user = req.user;
+
+  //const favoritosId = user.favorites;
+
+  const favoritos = await Product.find({ likes: new mongoose.Types.ObjectId(user._id) });
+
+  res.status(200).json(favoritos);
+
+}
+
 //insert a new product in DB
 const insertProduct = async(req, res) => {
-  const {name, description, previousPrice, price, shipping, images, categories} = req.body;
+  const {name, description, previousPrice, price, shipping, images, categories, specifications} = req.body;
 
-  const total = price + shipping;
+  //deve ser utilizado esse o toFixed() para evitar um bug na soma dos numeros
+  const total = (price + shipping).toFixed(2);
+
+  var categorias = categories.map((element) => {element = new mongoose.Types.ObjectId(element)});
 
   const newProduct = await Product.create({
-    name,
+    name: name.toLowerCase(),
     description,
     previousPrice,
     price,
     shipping,
     total,
     images,
-    categories
+    categorias,
+    specifications
   });
 
   if(!newProduct){
@@ -132,13 +147,17 @@ const insertProduct = async(req, res) => {
 
 //update product
 const updateProduct = async(req, res) => {
-  const {_id, name, description, previousPrice, price, shipping, images, categories} = req.body;
+  const {name, description, previousPrice, price, shipping, images, categories, specifications} = req.body;
+  const {id} = req.params
+
+  //categories.forEach(function(index){ this[index] = new mongoose.Types.ObjectId(this[index])}, categories);
+  var categorias = categories.map(element => element = new mongoose.Types.ObjectId(element));
 
   try{
-    const product = await Product.findById(new mongoose.Types.ObjectId(_id));
+    const product = await Product.findById(new mongoose.Types.ObjectId(id));
 
     if(name){
-      product.name = name;
+      product.name = name.toLowerCase();
     }
     if(description){
       product.description = description;
@@ -156,10 +175,14 @@ const updateProduct = async(req, res) => {
       product.images = images;
     }
     if(categories){
-      product.categories = categories;
+      product.categories = categorias;
     }
 
-    product.total = price + shipping;
+    if(specifications){
+      product.specifications = specifications;
+    }
+
+    product.total = (price + shipping).toFixed(2);
 
     await product.save();
 
@@ -189,25 +212,46 @@ const deleteProduct = async(req, res) => {
 
 //like a product
 const likeProduct = async(req, res) => {
-  const {id} = req.body;
+  const {id} = req.params;
   const user = req.user;
 
   try {
     
     const produto = await Product.findById(new mongoose.Types.ObjectId(id));
 
-    produto.likes.push(new mongoose.Types.ObjectId(user._id));
+    let operation;
 
-    const userLike = favoriteProduct(user._id, produto._id);
+    //produto ainda não foi dado like pelo usuário
+    if(!produto.likes.includes(new mongoose.Types.ObjectId(user._id))){
+      produto.likes.push(new mongoose.Types.ObjectId(user._id));
 
-    if(!userLike){
-      req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
-      return;
+      const userLike = favoriteProduct(user._id, produto._id);
+
+      if(!userLike){
+        req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+        return;
+      }
+
+      operation = "favoritado";
+    } else {         
+      //produto já foi dado like pelo usuário
+
+      const index = produto.likes.indexOf(new mongoose.Types.ObjectId(user._id));
+      produto.likes.splice(index, 1);
+
+      const userDislike = desfavoriteProduct(user._id, produto._id);
+
+      if(!userDislike){
+        req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+        return;
+      }
+
+      operation = "desfavoritado";
     }
 
     await produto.save();
 
-    res.status(200).json({message: ["Produto favoritado."]});
+    res.status(200).json({message: ["Produto " + operation + "."]});
 
 
   } catch (error) {
@@ -216,33 +260,43 @@ const likeProduct = async(req, res) => {
   }
 }
 
-const dislikeProduct = async(req, res) => {
-  const {id} = req.body;
-  const user = req.user;
-
+const favoriteProduct = async(user, product) => {
   try {
     
-    const produto = await Product.findById(new mongoose.Types.ObjectId(id));
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
 
-    //produto.likes.push(new mongoose.Types.ObjectId(user._id));
-    produto.likes = produto.likes.filter(user => user !== new mongoose.Types.ObjectId(user._id));
+    usuario.favorites.push(new mongoose.Types.ObjectId(product));
 
-    const userDislike = desfavoriteProduct(user._id, produto._id);
+    await usuario.save();
 
-    if(!userDislike){
-      req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
-      return;
-    }
+    return true;
 
-    await produto.save();
-
-    res.status(200).json({message: ["Produto favoritado."]});
 
   } catch (error) {
-    req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
-    return;
+    return false;
   }
 }
+
+const desfavoriteProduct = async(user, product) => {
+  try {
+    
+    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
+
+    //usuario.favorites.push(new mongoose.Types.ObjectId(product));
+    //usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
+    const index = usuario.favorites.indexOf(new mongoose.Types.ObjectId(product));
+    usuario.favorites.splice(index, 1);
+
+    await usuario.save();
+
+    return true;
+
+
+  } catch (error) {
+    return false;
+  }
+}
+
 
 module.exports = {
   getProductById,
@@ -250,9 +304,9 @@ module.exports = {
   getBest,
   getProductsBySearch,
   getProductsByCategory,
+  getUserFavorites,
   insertProduct,
   updateProduct,
   deleteProduct,
-  likeProduct,
-  dislikeProduct,
+  likeProduct
 }

@@ -8,29 +8,29 @@ const {
   getBest, 
   getProductsBySearch, 
   getProductsByCategory,
+  getUserFavorites,
   insertProduct,
   updateProduct,
   deleteProduct,
-  likeProduct,
-  dislikeProduct
+  likeProduct
 } = require("../controllers/ProductController");
 
 //middlewares
-const { productCreateValidator, productUpdateValidator, productLikeValidator } = require("../middlewares/productValidations");
+const { productCreateValidator, productUpdateValidator} = require("../middlewares/productValidations");
 const validate = require("../middlewares/handleValidation");
 const authGuard = require("../middlewares/authGuard");
 const adminGuard = require("../middlewares/adminGuard");
 
 //routes
-router.get("/:id", getProductById); //GET produto especifico pelo seu id
+router.get("/product/:id", getProductById); //GET produto especifico pelo seu id
 router.get("/newest", getNewest); //GET produtos mais novos
 router.get("/best", getBest); //GET produtos mais caros
-router.get("/search/:name", getProductsBySearch); //GET produtos pesquisados pelo usuário
-router.get("/search/category/:name", getProductsByCategory); //GET produtos pela categoria pesquisada
+router.get("/search/product/:name", getProductsBySearch); //GET produtos pesquisados pelo usuário
+router.get("/search/category/:id", getProductsByCategory); //GET produtos pela categoria pesquisada
+router.get("/userFavorites", authGuard, getUserFavorites); //GET nos produtos favoritos do usuário
 
 router.post("/", authGuard, adminGuard, productCreateValidator(), validate, insertProduct); //Cadastrar novo produto
-router.put("/like", authGuard, productLikeValidator(), validate, likeProduct); //Usuário favorita produto
-router.put("/dislike", authGuard, productLikeValidator(), validate, dislikeProduct); //Usuário desfavorita produto
+router.put("/like/:id", authGuard, likeProduct); //Usuário favorita produto
 router.put("/:id", authGuard, adminGuard, productUpdateValidator(), validate, updateProduct); //Atualizar dados de um produto
 router.delete("/:id", authGuard, adminGuard, deleteProduct); //Deletar um produto
 

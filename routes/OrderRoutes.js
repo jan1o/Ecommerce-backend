@@ -14,7 +14,7 @@ const adminGuard = require("../middlewares/adminGuard");
 router.get("/", authGuard, adminGuard, getAllOrders); //GET todos os pedidos
 router.get("/userOrders", authGuard, getUserOrders); //GET pedidos do usuário logado
 
-router.put("/:id", authGuard, adminGuard, updateStatusValidator(), validate, attOrderStatus); //Atualizar status do pedido
+router.put("/updateOrder/:id", authGuard, adminGuard, updateStatusValidator(), validate, attOrderStatus); //Atualizar status do pedido
 router.put("/cancelOrder/:id", authGuard, cancelOrder); //Usuário cancela a compra
 
 module.exports = router;

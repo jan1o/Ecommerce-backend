@@ -1,4 +1,5 @@
 const Cart = require("../models/Cart");
+const Product = require("../models/Product");
 
 const mongoose = require("mongoose");
 
@@ -36,6 +37,8 @@ const emptyCart = async(req, res) => {
 
     cart.products = [];
 
+    cart.total = 0;
+
     await cart.save();
     
     res.status(200).json(cart);
@@ -52,12 +55,14 @@ const addProductToCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.findOne({ user: new mongoose.Types.ObjectId(user._id) });
 
-    const productList = cart.products;
+    var productList = cart.products;
 
-    if(productList.find(p => p.name === new mongoose.Types.ObjectId(id))){
-      productList[0][new mongoose.Types.ObjectId(id)].amount += 1;
+    //const found = productList.some(obj => obj.product.equals(new mongoose.Types.ObjectId(id)));
+    const index = productList.findIndex(obj => obj.product.equals(new mongoose.Types.ObjectId(id)));
+    if(index !== -1){
+      productList[index].amount += 1;
     }
     else{
       productList.push({product: new mongoose.Types.ObjectId(id), amount: 1});
@@ -67,9 +72,15 @@ const addProductToCart = async(req, res) => {
 
     await cart.save();
 
+    const total = updateTotal(user._id);
+    if(!total){
+      throw new Error("Falha ao atualizar total do carrinho.");
+    }
+
     res.status(200).json(cart);
 
   } catch(error){
+    console.log(error);
     res.status(400).json({errors: ["Houve um erro, por favor tente mais tarde."]});
     return;
   }
@@ -81,15 +92,17 @@ const removeProductFromCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.findOne({ user: new mongoose.Types.ObjectId(user._id) });
 
-    const productList = cart.products;
+    var productList = cart.products;
 
-    productList.filter(p => p.product !== new mongoose.Types.ObjectId(id));
+    productList = productList.filter(obj => !obj.product.equals(new mongoose.Types.ObjectId(id)));
     
     cart.products = productList;
 
     await cart.save();
+
+    const total = updateTotal(user._id);
 
     res.status(200).json(cart);
 
@@ -105,17 +118,25 @@ const updateProductAmount = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id) });
+    const cart = await Cart.findOne({ user: new mongoose.Types.ObjectId(user._id) });
 
-    const productList = cart.products;
+    var productList = cart.products;
 
-    if(productList.find(p => p.name === new mongoose.Types.ObjectId(id))){
-      productList[0][new mongoose.Types.ObjectId(id)].amount = amount;
+    const index = productList.findIndex(obj => obj.product.equals(new mongoose.Types.ObjectId(id)));
+
+    if(index !== -1){
+      productList[index].amount = amount;
+    }
+    else{
+      res.status(400).json({errors: ["Produto não encontrado no carrinho."]});
+      return;
     }
 
     cart.products = productList;
 
     await cart.save();
+
+    const total = updateTotal(user._id);
 
     res.status(200).json(cart);
 
@@ -125,26 +146,9 @@ const updateProductAmount = async(req, res) => {
   }
 }
 
-const createCart = async(userId) => {
-  try {
 
-    const cart = await Cart.create({
-      user: new mongoose.Types.ObjectId(userId),
-      products: [],
-      total: 0
-    });
 
-    if(!cart){
-      return false;
-    }
 
-    return true;
-
-  } catch(error){
-    console.log(error);
-    return(false);
-  }
-}
 
 module.exports = {
   getUserCart,
@@ -152,5 +156,4 @@ module.exports = {
   addProductToCart,
   removeProductFromCart,
   updateProductAmount,
-  createCart
 }

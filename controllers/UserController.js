@@ -1,8 +1,7 @@
 const User = require("../models/User");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
-
-const { createCart } = require("./CartController");
+const Cart = require("../models/Cart");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -39,15 +38,6 @@ const register = async(req, res) => {
   });
 
   if(!newUser){
-    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
-    return;
-  }
-
-  const userCreated = await User.findOne({email}).select("-password");
-  const cart = createCart(new mongoose.Types.ObjectId(userCreated._id));
-
-  if(!cart){
-    await User.deleteOne({ _id: new mongoose.Types.ObjectId(userCreated._id) });
     res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
     return;
   }
@@ -129,82 +119,9 @@ const update = async (req, res) => {
   res.status(200).json(user);
 }
 
-const getUserFavorites = async (req, res) => {
-  const user = req.user;
-
-  //const favoritosId = user.favorites;
-
-  const favoritos = await Product.find({ likes: new mongoose.Types.ObjectId(user._id) });
-
-  res.status(200).json(favoritos);
-
-}
-
-const getUserOrders = async (req, res) => {
-  const user = req.user;
-
-  try{
-
-    const pedidos = await Order.find({ user: new mongoose.Types.ObjectId(user._id)});
-
-    //verificar se algum pedido foi encontrado
-    if(!pedidos){
-      res.status(404).json({errors: ["Nenhum pedido foi encontrado."]});
-      return;
-    }
-
-    res.status(200).json(pedidos);
-
-  } catch (error){
-
-    res.status(404).json({errors: ["Pedidos não encontrados."]});
-    return;
-
-  }
-}
-
-const favoriteProduct = async(user, product) => {
-  try {
-    
-    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
-
-    usuario.favorites.push(new mongoose.Types.ObjectId(product));
-
-    await usuario.save();
-
-    return true;
-
-
-  } catch (error) {
-    return false;
-  }
-}
-
-const desfavoriteProduct = async(user, product) => {
-  try {
-    
-    const usuario = await User.findById(new mongoose.Types.ObjectId(user)).select("-password");
-
-    //usuario.favorites.push(new mongoose.Types.ObjectId(product));
-    usuario.favorites = usuario.favorites.filter(p => p !== new mongoose.Types.ObjectId(product));
-
-    await usuario.save();
-
-    return true;
-
-
-  } catch (error) {
-    return false;
-  }
-}
-
 module.exports = {
   register,
   login,
   getCurrentUser, 
   update,
-  getUserFavorites,
-  getUserOrders,
-  favoriteProduct,
-  desfavoriteProduct,
 }

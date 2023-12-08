@@ -16,7 +16,11 @@ const productCreateValidator = () => {
     body("categories")
       .optional()
       .isArray()
-      .withMessage("Caso desejar adicionar categorias, envie uma lista")
+      .withMessage("Caso desejar adicionar categorias, envie uma lista"),
+    body("specifications")
+      .optional()
+      .isArray()
+      .withMessage("Caso desejar adicionar especificações, envie uma lista")
   ];
 }
 
@@ -34,22 +38,18 @@ const productUpdateValidator = () => {
     body("shipping")
       .isDecimal({}).withMessage("O valor do frete é obrigatório."),
     body("categories")
+      .optional()
+      .isArray()
+      .withMessage("Caso desejar adicionar categorias, envie uma lista"),
+    body("specifications")
     .optional()
     .isArray()
-    .withMessage("Caso desejar adicionar categorias, envie uma lista")
+    .withMessage("Caso desejar adicionar especificações, envie uma lista")
   ];
 }
 
-const productLikeValidator = () => {
-  return [
-    body("id")
-      .isString()
-      .withMessage("É necessário selecionar um produto.")
-  ];
-}
 
 module.exports = {
   productCreateValidator,
   productUpdateValidator,
-  productLikeValidator,
 }

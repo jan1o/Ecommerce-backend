@@ -16,19 +16,27 @@ const getAllOrders = async(req, res) => {
 }
 
 const getUserOrders = async(req, res) => {
-  const user = req.user;
-
-  try{
-
-    const orders = await Order.find({ user: new mongoose.Types.ObjectId(user._id) });
-
-    res.status(200).json(orders);
-
-  } catch(error){
-    res.status(404).json({errors: ["Nenhum pedido encontrado"]});
-    return;
+    const user = req.user;
+  
+    try{
+  
+      const pedidos = await Order.find({ user: new mongoose.Types.ObjectId(user._id)});
+  
+      //verificar se algum pedido foi encontrado
+      if(!pedidos){
+        res.status(404).json({errors: ["Nenhum pedido foi encontrado."]});
+        return;
+      }
+  
+      res.status(200).json(pedidos);
+  
+    } catch (error){
+  
+      res.status(404).json({errors: ["Pedidos não encontrados."]});
+      return;
+  
+    }
   }
-}
 
 const attOrderStatus = async(req, res) => {
   const {status} = req.body;

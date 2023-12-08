@@ -97,7 +97,9 @@ const removeCategory = async(req, res) => {
 
   try {
     
-    const categoria = await Category.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
+    const categoria = await Category.findOne({_id: new mongoose.Types.ObjectId(id)});
+    await categoria.deleteOne();
+    //const categoria = await Category.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
 
     res.status(200).json({message: ["Categoria deletada com sucesso."]})
 
