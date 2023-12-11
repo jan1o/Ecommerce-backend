@@ -18,3 +18,4 @@ As versões devem obedecer o padrão **0.0.0** onde o *primeiro dígito* se refe
 | 0.7.5 | Concertos nas funcionalidades de carrinho. | Nenhum alerta pertinente. |
 | 0.7.6 | Adição de pre("save) ao model de usuário e remoção da funcao de criar carrinho do controller | Nenhum alerta pertinente. |
 | 0.7.7 | Model de categoria agora remove categorias deletadas da lista de categorias dos produtos. | Nenhum alerta pertinente. |
+| 0.7.8 | Model de produto agora remove seus registros dos favoritos dos usuário e dos carrinhos quando removido. | Nenhum alerta pertinente. |

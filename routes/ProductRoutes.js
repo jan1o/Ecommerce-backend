@@ -31,7 +31,7 @@ router.get("/userFavorites", authGuard, getUserFavorites); //GET nos produtos fa
 
 router.post("/", authGuard, adminGuard, productCreateValidator(), validate, insertProduct); //Cadastrar novo produto
 router.put("/like/:id", authGuard, likeProduct); //Usuário favorita produto
-router.put("/:id", authGuard, adminGuard, productUpdateValidator(), validate, updateProduct); //Atualizar dados de um produto
+router.put("/update/:id", authGuard, adminGuard, productUpdateValidator(), validate, updateProduct); //Atualizar dados de um produto
 router.delete("/:id", authGuard, adminGuard, deleteProduct); //Deletar um produto
 
 module.exports = router;

@@ -72,11 +72,6 @@ const addProductToCart = async(req, res) => {
 
     await cart.save();
 
-    const total = updateTotal(user._id);
-    if(!total){
-      throw new Error("Falha ao atualizar total do carrinho.");
-    }
-
     res.status(200).json(cart);
 
   } catch(error){
@@ -101,8 +96,6 @@ const removeProductFromCart = async(req, res) => {
     cart.products = productList;
 
     await cart.save();
-
-    const total = updateTotal(user._id);
 
     res.status(200).json(cart);
 
@@ -136,8 +129,6 @@ const updateProductAmount = async(req, res) => {
 
     await cart.save();
 
-    const total = updateTotal(user._id);
-
     res.status(200).json(cart);
 
   } catch(error){
@@ -145,9 +136,6 @@ const updateProductAmount = async(req, res) => {
     return;
   }
 }
-
-
-
 
 
 module.exports = {

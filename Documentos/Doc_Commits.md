@@ -38,3 +38,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 010 | 0.7.5 | Concertos nas funcionalidades de carrinho. |
 | 011 | 0.7.6 | Melhorias no model e controller de usuário. |
 | 012 | 0.7.7 | Melhorias model de categorias. |
+| 013 | 0.7.8 | Melhorias no model de produto. |
