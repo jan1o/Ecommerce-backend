@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const User = require("../models/User");
 
 const mongoose = require("mongoose");
 
@@ -200,7 +201,8 @@ const deleteProduct = async(req, res) => {
 
   try{
 
-    const product = await Product.deleteOne({ _id: new mongoose.Types.ObjectId(id) });
+    const product = await Product.findOne({ _id: new mongoose.Types.ObjectId(id) });
+    await product.deleteOne();
 
     res.status(200).json({message: ["Produto deletado com sucesso."]});
 
