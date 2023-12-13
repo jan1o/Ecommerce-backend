@@ -40,3 +40,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 012 | 0.7.7 | Melhorias model de categorias. |
 | 013 | 0.7.8 | Melhorias no model de produto. |
 | 014 | 0.7.8 | Quantidade de produtos de get best e newest redefinido para 4. |
+| 015 | 0.7.8 | Validate user token adicionado. |

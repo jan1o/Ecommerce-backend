@@ -119,9 +119,14 @@ const update = async (req, res) => {
   res.status(200).json(user);
 }
 
+const validateUser = async(req, res) => {
+  res.status(201).json({message: ["Token válido."]});
+}
+
 module.exports = {
   register,
   login,
   getCurrentUser, 
   update,
+  validateUser
 }
