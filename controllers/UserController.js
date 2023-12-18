@@ -77,9 +77,10 @@ const login = async (req, res) => {
 
 //get current logged in user
 const getCurrentUser = async (req, res) => {
-  const user = req.user; //usuário retornado pelo authguard
+  const uer = req.user; //usuário retornado pelo authguard
 
   res.status(200).json(user);
+
 }
 
 //update an user
