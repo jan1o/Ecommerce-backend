@@ -77,7 +77,7 @@ const login = async (req, res) => {
 
 //get current logged in user
 const getCurrentUser = async (req, res) => {
-  const uer = req.user; //usuário retornado pelo authguard
+  const user = req.user; //usuário retornado pelo authguard
 
   res.status(200).json(user);
 
@@ -89,35 +89,41 @@ const update = async (req, res) => {
   const {name, birth, telephone, image, password} = req.body;
 
   const reqUser = req.user;
+  
+  try {
+    const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select("-password");
 
-  const user = await User.findById(new mongoose.Types.ObjectId(reqUser._id)).select("-password");
+    if(name){
+      user.name = name;
+    }
 
-  if(name){
-    user.name = name;
+    if(birth){
+      user.birth = birth;
+    }
+
+    if(telephone){
+      user.telephone = telephone;
+    }
+
+    if(image){
+      user.image = image;
+    }
+
+    if(password){
+      const salt = await bcrypt.genSalt();
+      const passwordHash = await bcrypt.hash(password, salt);
+
+      user.password = passwordHash;
+    }
+
+    await user.save();
+
+    res.status(200).json(user);
+
+  } catch (error) {
+    res.status(422).json({errors: ["Houve um erro. Tente novamente mais tarde."]});
+    return;
   }
-
-  if(birth){
-    user.birth = birth;
-  }
-
-  if(telephone){
-    user.telephone = telephone;
-  }
-
-  if(image){
-    user.image = image;
-  }
-
-  if(password){
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    user.password = passwordHash;
-  }
-
-  await user.save();
-
-  res.status(200).json(user);
 }
 
 const validateUser = async(req, res) => {

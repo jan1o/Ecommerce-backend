@@ -42,3 +42,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 014 | 0.7.8 | Quantidade de produtos de get best e newest redefinido para 4. |
 | 015 | 0.7.8 | Validate user token adicionado. |
 | 016 | 0.7.8 | Pequeno ajuste no UserController. |
+| 017 | 0.7.8 | Ajuste no model de Order para melhor adequação ao sistema. |

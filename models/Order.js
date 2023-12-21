@@ -12,7 +12,15 @@ const orderSchema = new Schema({
     address: String,
     complement: String,
   },
-  products: Array,
+  products: [
+    {
+      product: Schema.Types.ObjectId,
+      image: String,
+      name: String,
+      price: Number,
+      amount: Number,
+    }
+  ],
   total: Number,
   status: String,
   request_cancel: Boolean,
