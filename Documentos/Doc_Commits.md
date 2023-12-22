@@ -43,3 +43,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 015 | 0.7.8 | Validate user token adicionado. |
 | 016 | 0.7.8 | Pequeno ajuste no UserController. |
 | 017 | 0.7.8 | Ajuste no model de Order para melhor adequação ao sistema. |
+| 018 | 0.7.9 | Ajuste no controller de produto na parte de likes. |
