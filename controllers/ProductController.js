@@ -230,7 +230,7 @@ const likeProduct = async(req, res) => {
       const userLike = favoriteProduct(user._id, produto._id);
 
       if(!userLike){
-        req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+        res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
         return;
       }
 
@@ -244,7 +244,7 @@ const likeProduct = async(req, res) => {
       const userDislike = desfavoriteProduct(user._id, produto._id);
 
       if(!userDislike){
-        req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+        res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
         return;
       }
 
@@ -257,7 +257,7 @@ const likeProduct = async(req, res) => {
 
 
   } catch (error) {
-    req.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
+    res.status(422).json({errors: ["Houve um erro, por favor tente mais tarde."]});
     return;
   }
 }
