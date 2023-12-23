@@ -8,14 +8,14 @@ const getUserCart = async(req, res) => {
 
   try{
 
-    const cart = await Cart.find({ user: new mongoose.Types.ObjectId(user._id)});
+    const cart = await Cart.findOne({ user: new mongoose.Types.ObjectId(user._id)});
 
-    if(!cart){
-      res.status(404).json({errors: ["Carrinho Vazio."]});
-      return;
-    }
+    const productsId = cart.products.map((p) => {return new mongoose.Types.ObjectId(p.product)});
+    const products = await Product.find({ _id: { $in: productsId } });
 
-    res.status(200).json(cart);
+    const data = { cart: cart, products: products };
+
+    res.status(200).json(data);
 
   } catch(error){
     res.status(400).json({errors: ["Houve um erro, por favor tente mais tarde."]});
@@ -97,7 +97,12 @@ const removeProductFromCart = async(req, res) => {
 
     await cart.save();
 
-    res.status(200).json(cart);
+    const productsId = cart.products.map((p) => {return new mongoose.Types.ObjectId(p.product)});
+    const products = await Product.find({ _id: { $in: productsId } });
+
+    const data = { cart: cart, products: products };
+
+    res.status(200).json(data);
 
   } catch(error){
     res.status(400).json({errors: ["Houve um erro, por favor tente mais tarde."]});
@@ -129,7 +134,7 @@ const updateProductAmount = async(req, res) => {
 
     await cart.save();
 
-    res.status(200).json(cart);
+    res.status(200).json({message: ["Quantidade atualizada com sucesso."]});
 
   } catch(error){
     res.status(400).json({errors: ["Houve um erro, por favor tente mais tarde."]});
