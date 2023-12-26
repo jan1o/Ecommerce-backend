@@ -14,9 +14,11 @@ const categoryCreateValidator = () => {
 const categoryUpdateValidator = () => {
   return [
     body("name")
+      .optional()
       .isString()
       .withMessage("O nome da categoria deve ser em formato de texto"),
     body("image")
+      .optional()
       .isURL()
       .withMessage("A imagem da categoria deve ser uma URL para uma imagem")
   ]

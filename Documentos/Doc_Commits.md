@@ -45,3 +45,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 017 | 0.7.8 | Ajuste no model de Order para melhor adequação ao sistema. |
 | 018 | 0.7.9 | Ajuste no controller de produto na parte de likes. |
 | 019 | 0.7.10 | Ajuste no controller de cart. | 
+| 020 | 0.7.10 | Pequeno ajuste no middleware de category. |
