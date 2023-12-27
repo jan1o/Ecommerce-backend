@@ -3,6 +3,7 @@ const router = express.Router();
 
 //controllers
 const { 
+  getAll,
   getProductById, 
   getNewest, 
   getBest, 
@@ -22,6 +23,7 @@ const authGuard = require("../middlewares/authGuard");
 const adminGuard = require("../middlewares/adminGuard");
 
 //routes
+router.get("/", getAll); //GET em todos os produtos
 router.get("/product/:id", getProductById); //GET produto especifico pelo seu id
 router.get("/newest", getNewest); //GET produtos mais novos
 router.get("/best", getBest); //GET produtos mais caros

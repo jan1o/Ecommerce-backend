@@ -3,6 +3,25 @@ const User = require("../models/User");
 
 const mongoose = require("mongoose");
 
+//get all products
+const getAll = async(req, res) => {
+  try {
+    
+    const produtos = await Product.find({});
+
+    if(!produtos){
+      res.status(404).json({errors: ["Nenhum produto foi encontrado."]});
+      return;
+    }
+
+    res.status(200).json(produtos);
+
+  } catch (error) {
+    res.status(404).json({errors: ["Houve um erro, tente mais tarde."]});
+    return;
+  }
+}
+
 //get product by id
 const getProductById = async(req, res) => {
   const {id} = req.params;
@@ -301,6 +320,7 @@ const desfavoriteProduct = async(user, product) => {
 
 
 module.exports = {
+  getAll,
   getProductById,
   getNewest,
   getBest,

@@ -46,3 +46,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 018 | 0.7.9 | Ajuste no controller de produto na parte de likes. |
 | 019 | 0.7.10 | Ajuste no controller de cart. | 
 | 020 | 0.7.10 | Pequeno ajuste no middleware de category. |
+| 021 | 0.7.10 | Adicionada funcionalidade de getAll no controller de produtos. |
