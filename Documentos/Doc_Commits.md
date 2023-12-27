@@ -47,3 +47,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 019 | 0.7.10 | Ajuste no controller de cart. | 
 | 020 | 0.7.10 | Pequeno ajuste no middleware de category. |
 | 021 | 0.7.10 | Adicionada funcionalidade de getAll no controller de produtos. |
+| 022 | 0.7.11 | Concerto de bug no controler delete product. |
