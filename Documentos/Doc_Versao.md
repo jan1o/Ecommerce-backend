@@ -22,3 +22,4 @@ As versões devem obedecer o padrão **0.0.0** onde o *primeiro dígito* se refe
 | 0.7.9 | Fixed: erro na parte de likes do controller de produtos. | Nenhum alerta pertinente. |
 | 0.7.10 | Ajuste no controller de cart nas funções de getUserCart e removeProductFromCart. | Nenhum alerta pertinente. |
 | 0.7.11 | Fixed: erro no controller de de produto na parte de delete. | Nenhum alerta pertinente. |
+| 0.7.12 | Melhoria no middleware de produto realizada. Agora a lista de imagens também está acobertada pelo middleware. | Nenhum alerta pertinente. |
