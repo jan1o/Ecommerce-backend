@@ -8,19 +8,22 @@ const productCreateValidator = () => {
     body("description")
       .isString().withMessage("A descrição é obrigatória."),
     body("previousPrice")
-      .isDecimal({ gt: 0 }).withMessage("O preço anterior é obrigatório"),
+      .isDecimal({ gt: 0 }).withMessage("O preço anterior é obrigatório."),
     body("price")
-      .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório"),
+      .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório."),
     body("shipping")
-      .isDecimal({}).withMessage("O valor do frete é obrigatório"),
+      .isDecimal({}).withMessage("O valor do frete é obrigatório."),
     body("categories")
       .optional()
       .isArray()
-      .withMessage("Caso desejar adicionar categorias, envie uma lista"),
+      .withMessage("Caso desejar adicionar categorias, envie uma lista."),
     body("specifications")
       .optional()
       .isArray()
-      .withMessage("Caso desejar adicionar especificações, envie uma lista")
+      .withMessage("Caso desejar adicionar especificações, envie uma lista."),
+    body("images")
+      .isArray()
+      .withMessage("è necessário enviar uma lista de imagens para exibição.")
   ];
 }
 
@@ -40,11 +43,14 @@ const productUpdateValidator = () => {
     body("categories")
       .optional()
       .isArray()
-      .withMessage("Caso desejar adicionar categorias, envie uma lista"),
+      .withMessage("Caso desejar adicionar categorias, envie uma lista."),
     body("specifications")
-    .optional()
-    .isArray()
-    .withMessage("Caso desejar adicionar especificações, envie uma lista")
+      .optional()
+      .isArray()
+      .withMessage("Caso desejar adicionar especificações, envie uma lista."),
+    body("images")
+      .isArray()
+      .withMessage("è necessário enviar uma lista de imagens para exibição.")
   ];
 }
 
