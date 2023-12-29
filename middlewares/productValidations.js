@@ -12,7 +12,7 @@ const productCreateValidator = () => {
     body("price")
       .isDecimal({ gt: 0 }).withMessage("O preço é obrigatório."),
     body("shipping")
-      .isDecimal({}).withMessage("O valor do frete é obrigatório."),
+      .isDecimal().withMessage("O valor do frete é obrigatório."),
     body("categories")
       .optional()
       .isArray()
@@ -23,7 +23,7 @@ const productCreateValidator = () => {
       .withMessage("Caso desejar adicionar especificações, envie uma lista."),
     body("images")
       .isArray()
-      .withMessage("è necessário enviar uma lista de imagens para exibição.")
+      .withMessage("É necessário enviar uma lista de imagens para exibição.")
   ];
 }
 

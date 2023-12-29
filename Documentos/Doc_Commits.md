@@ -49,3 +49,4 @@ Abaixo devem ser listados todos os commits realizados (com exceção dos commits
 | 021 | 0.7.10 | Adicionada funcionalidade de getAll no controller de produtos. |
 | 022 | 0.7.11 | Concerto de bug no controler delete product. |
 | 023 | 0.7.12 | Melhoria de middleware de produto. |
+| 024 | 0.7.13 | Concertos no controller de produto. |
