@@ -141,9 +141,10 @@ const insertProduct = async(req, res) => {
   const {name, description, previousPrice, price, shipping, images, categories, specifications} = req.body;
 
   //deve ser utilizado esse o toFixed() para evitar um bug na soma dos numeros
-  const total = (price + shipping).toFixed(2);
+  let total = Number(price) + Number(shipping);
+  total = total.toFixed(2);
 
-  var categorias = categories.map((element) => {element = new mongoose.Types.ObjectId(element)});
+  var categorias = categories.map((element) => {element = new mongoose.Types.ObjectId(element._id)});
 
   const newProduct = await Product.create({
     name: name.toLowerCase(),
@@ -153,7 +154,7 @@ const insertProduct = async(req, res) => {
     shipping,
     total,
     images,
-    categorias,
+    categories: categorias,
     specifications
   });
 
@@ -171,7 +172,7 @@ const updateProduct = async(req, res) => {
   const {id} = req.params
 
   //categories.forEach(function(index){ this[index] = new mongoose.Types.ObjectId(this[index])}, categories);
-  var categorias = categories.map(element => element = new mongoose.Types.ObjectId(element));
+  var categorias = categories.map(element => element = new mongoose.Types.ObjectId(element._id));
 
   try{
     const product = await Product.findById(new mongoose.Types.ObjectId(id));
@@ -201,8 +202,9 @@ const updateProduct = async(req, res) => {
     if(specifications){
       product.specifications = specifications;
     }
-
-    product.total = (price + shipping).toFixed(2);
+    
+    let total = Number(price) + Number(shipping);
+    product.total = total.toFixed(2);
 
     await product.save();
 
